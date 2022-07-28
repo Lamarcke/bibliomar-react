@@ -2,6 +2,10 @@ body {
     font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 
+abbr[title]{
+    text-decoration: none !important;
+}
+
 abbr[title]:after
 {
     content: " (" attr(title) ")";
@@ -25,7 +29,9 @@ abbr[title]:after
     background-size: cover;
 }
 
+/*noinspection ALL*/
 .bg-alt {
+    /*noinspection CssUnknownTarget*/
     background: url("/assets/img/layered-waves-haikei (2).svg") no-repeat fixed center center;
     background-size: cover;
 }
@@ -71,8 +77,14 @@ abbr[title]:after
 }
 
 .library-figure-img{
-    width: 25vw;
+    min-width: 40%;
+    max-width: 40%;
+
     height: auto;
+}
+
+.reader-spotlight-figure-img{
+    min-width: 50%;
 }
 
 .library-row:hover{
@@ -95,6 +107,10 @@ abbr[title]:after
     width: 30vw;
 }
 
+.saved-list-div{
+    width: fit-content;
+}
+
 .library-actions-button{
     width: 40vw;
 }
@@ -106,7 +122,6 @@ abbr[title]:after
 
 
 @media screen and (min-width: 600px) {
-
     abbr[title]:after
     {
         content: "";
@@ -140,13 +155,19 @@ abbr[title]:after
         width: fit-content;
     }
 
+
+
     .library-section-div{
-        width: 84vw;
+        width: 70vw;
     }
 
     .library-figure-img{
-        width: 5vw;
+        min-width:  5vw;
         height: auto;
+    }
+
+    .reader-spotlight-figure-img{
+        min-width: 30%;
     }
 
     .bookcaption {
@@ -158,6 +179,7 @@ abbr[title]:after
     }
 
     .bg-alt {
+        /*noinspection CssUnknownTarget*/
         background: url("/assets/img/back-lg-2.svg") no-repeat fixed center center;
         background-size: cover;
     }
@@ -174,6 +196,10 @@ abbr[title]:after
 
     .library-actions-button{
         width: 15vw;
+    }
+
+    .saved-list-div{
+        width: 70%;
     }
 
 }

@@ -12,6 +12,8 @@ import Error404 from "./components/general/Error404";
 import LibraryParent from "./components/library/LibraryParent";
 import LibraryLanding from "./components/library/main/LibraryLanding";
 import LibraryExpandedScreen from "./components/library/expanded/LibraryExpandedScreen";
+import ReaderLanding from "./components/reader/ReaderLanding";
+import ReaderMain from "./components/reader/screen/ReaderMain";
 
 function App() {
     return (
@@ -67,6 +69,10 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="recover" element={<Recover />} />
+            </Route>
+            <Route path="/reader">
+                <Route index element={<ReaderLanding />} />
+                <Route path=":bookname" element={<ReaderMain />} />
             </Route>
         </Routes>
     );

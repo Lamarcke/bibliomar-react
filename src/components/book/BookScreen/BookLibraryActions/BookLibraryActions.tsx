@@ -4,7 +4,7 @@ import Break from "../../../general/Break";
 import axios from "axios";
 import { useState } from "react";
 import BookLibraryButton from "./BookLibraryButton";
-import { Book } from "../../../../helpers/types";
+import { Book } from "../../../../helpers/generalTypes";
 
 interface Props {
     bookInfo: Book;
@@ -19,7 +19,14 @@ export default function BookLibraryActions(props: Props) {
 
     async function addBook(evt: any, category: string) {
         evt.preventDefault();
-        const req_body = [props.bookInfo];
+        if (jwtToken == null) {
+            const redirect = location.pathname;
+            navigate(`/user/login?redirect=${redirect}`);
+            return;
+        }
+        let bookToAdd = props.bookInfo;
+        bookToAdd.category = category;
+        const req_body = [bookToAdd];
         const config = {
             url: `https://biblioterra.herokuapp.com/v1/library/add/${category}`,
             method: "POST",

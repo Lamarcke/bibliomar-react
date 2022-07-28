@@ -1,12 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Break from "../../general/Break";
 import BookDownload from "./BookDownload";
 import BookInfoError from "./BookInfoError";
 import BookLibraryActions from "./BookLibraryActions/BookLibraryActions";
 import BookLoginNeeded from "./BookLibraryActions/BookLoginNeeded";
-import { Book } from "../../../helpers/types";
+import { MDBBtn } from "mdb-react-ui-kit";
+import { Book, downloadLinks } from "../../../helpers/generalTypes";
+import {
+    PossibleReaderLandingStates,
+    PossibleReaderScreenStates,
+} from "../../reader/helpers/readerTypes";
 
 interface Props {
     md5: string;
@@ -25,14 +30,19 @@ export async function getMetadata(md5: string, topic: string) {
     }
 }
 
+// Here we use MDBootstrap col- classes to make the bookInfo stay in the right half of the screen.
 export default function BookInfo(props: Props) {
     const bookInfo = props.bookInfo;
+    const navigate = useNavigate();
     const [description, setDescription] = useState<string>("Carregando");
-    const [downloadLinks, setDownloadLinks] = useState<any>({});
+    const [downloadLinks, setDownloadLinks] = useState<
+        downloadLinks | undefined
+    >(undefined);
     const [bookError, setBookError] = useState<boolean>(false);
     const [userLogged, setUserLogged] = useState<boolean>(false);
+
     let fallbackLink: string | undefined = undefined;
-    if (bookInfo.hasOwnProperty("mirror1")) {
+    if (bookInfo.mirror1) {
         fallbackLink = bookInfo["mirror1"];
     }
     useEffect(() => {
@@ -101,27 +111,66 @@ export default function BookInfo(props: Props) {
             <div className="lead bg-black p-2 rounded-7 bg-opacity-75 text-light text-center mb-2 book-item">
                 <span className="fw-bold">Arquivo: </span>
                 <p>
-                    {bookInfo.extension ? bookInfo.extension.toUpperCase() : ""}
+                    {bookInfo.extension
+                        ? bookInfo.extension.toUpperCase()
+                        : null}
                     , {bookInfo["size"]}
                 </p>
             </div>
             <Break />
+            <div className="lead bg-black p-2 rounded-7 bg-opacity-75 text-light text-center mb-4 book-item">
+                <span className="fw-bold">Ler online: </span>
+                <br />
+                <MDBBtn
+                    className="mb-3"
+                    type="button"
+                    onClick={() => {
+                        if (downloadLinks) {
+                            // State to be used by ReaderLanding on /reader
+                            let readerLandingState: PossibleReaderLandingStates =
+                                {
+                                    bookInfo: bookInfo,
+                                    url: downloadLinks["IPFS.io"],
+                                    secondaryUrl: downloadLinks.Pinata,
+                                    category: undefined,
+                                };
+
+                            navigate("/reader", {
+                                state: readerLandingState,
+                            });
+                        }
+                    }}
+                    disabled={
+                        bookInfo.extension !== "epub" ||
+                        downloadLinks == undefined
+                    }
+                >
+                    Abrir no navegador
+                </MDBBtn>
+                <br />
+                {bookInfo.extension !== "epub" ? (
+                    <span className="text-muted" style={{ fontSize: "0.9rem" }}>
+                        Apenas arquivos EPUB são suportados.
+                    </span>
+                ) : null}
+            </div>
+            <Break />
             <div className="bg-black ps-3 py-2 bg-opacity-75 rounded-5 mb-2">
                 {!bookError ? (
-                    Object.entries(downloadLinks).length > 0 ? (
+                    downloadLinks != undefined ? (
                         <BookDownload downloadLinks={downloadLinks} />
                     ) : (
-                        <div className="text-light">
-                            <div className="text-center mb-2">
+                        <>
+                            <div className="text-center mb-2 text-light">
                                 <span className="lead fw-bold">
                                     Download desse arquivo:
                                 </span>
                                 <Break />
                             </div>
-                            <span className="lead d-flex justify-content-center">
-                                Carregando...
-                            </span>
-                        </div>
+                            <div className="d-flex flex-row flex-wrap justify-content-center text-light">
+                                <span>Carregando...</span>
+                            </div>
+                        </>
                     )
                 ) : (
                     <BookInfoError mirror={fallbackLink} />

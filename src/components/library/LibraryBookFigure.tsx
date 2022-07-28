@@ -5,17 +5,15 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { MDBBtn, MDBIcon, MDBRipple, MDBSpinner } from "mdb-react-ui-kit";
+import { MDBRipple, MDBSpinner } from "mdb-react-ui-kit";
 import { Portal } from "react-portal";
 import { useNavigate } from "react-router-dom";
-import Break from "../general/Break";
 import LibraryBookModal from "./LibraryBookModal";
 import { Size, useWindowSize } from "../general/useWindowSize";
 import LibraryBookIcon from "./LibraryBookIcon";
 import { EditModeContext, SelectedBooksContext } from "./utils/RelevantContext";
-import { Book } from "../../helpers/types";
+import { Book } from "../../helpers/generalTypes";
 
 interface Props {
     book: Book;
@@ -97,15 +95,12 @@ export default function LibraryBookFigure(props: Props) {
                             showProp={modalOn}
                             setShowProp={setModalOn}
                             setProgress={props.setProgress}
+                            size={size}
                         />
                     </Portal>
                 ) : null}
 
-                <div
-                    id="cover-div"
-                    className="me-2 library-figure-img"
-                    style={size.width! < 600 ? { minWidth: "30%" } : {}}
-                >
+                <div id="cover-div" className="me-2 library-figure-img">
                     {coverDone ? (
                         <LibraryBookIcon checked={checkboxToggle} />
                     ) : !editMode ? (
@@ -177,14 +172,20 @@ export default function LibraryBookFigure(props: Props) {
                     </MDBRipple>
                 </div>
                 <div id="info-div" className="">
-                    <span className="overflow-hidden">
-                        {props.book["title"]}
-                    </span>
-
-                    <Break />
-                    <span className="fst-italic" style={{ fontSize: "0.8rem" }}>
-                        {props.book["authors"]}
-                    </span>
+                    <p className="">
+                        <strong>Título: </strong> <br />
+                        {props.book.title}
+                    </p>
+                    <p className="">
+                        <strong>Autor(a)(s): </strong> <br />
+                        {props.book.authors}
+                    </p>
+                    {props.book.extension === "epub" ? (
+                        <span className="">
+                            <strong>Leitura iniciada: </strong> <br />
+                            {props.book.progress ? "Sim" : "Não"}
+                        </span>
+                    ) : null}
                 </div>
             </div>
         </div>

@@ -1,9 +1,8 @@
 import Break from "../general/Break";
-import RecommendationBookFigure from "../search/recommendations/RecommendationBookFigure";
 import LibraryBookFigure from "./LibraryBookFigure";
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Book } from "../../helpers/types";
+import { Book } from "../../helpers/generalTypes";
 
 interface Props {
     expanded?: boolean;
@@ -17,11 +16,11 @@ export default function LibrarySection(props: Props) {
     return (
         <div className="d-flex flex-wrap justify-content-center mb-4">
             <div className="bg-black p-2 rounded-3 bg-opacity-50 text-light p-3 library-section-div">
-                <div className="d-flex flex-wrap justify-content-start mb-2">
+                <div className="d-flex flex-wrap justify-content-center mb-2">
                     <span className="fw-bold lead">{props.message}</span>
                 </div>
                 <Break />
-                <div className="d-flex flex-wrap">
+                <div className="d-flex flex-wrap justify-content-center">
                     {props.booksInfo.length > 0 ? (
                         props.booksInfo.map((el, i) => {
                             if (!props.expanded) {

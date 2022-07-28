@@ -8,16 +8,16 @@ import {
     MDBModalFooter,
     MDBModalHeader,
     MDBModalTitle,
-    MDBSpinner,
 } from "mdb-react-ui-kit";
 
-import BookInfo from "../book/BookScreen/BookInfo";
 import Break from "../general/Break";
 import LibraryBookModalBody from "./LibraryBookModalBody";
 import { useFormik } from "formik";
 import axios from "axios";
-import jwt_decode, { JwtPayload } from "jwt-decode";
-import { Book } from "../../helpers/types";
+// eslint-disable-next-line camelcase
+import jwt_decode from "jwt-decode";
+import { Book } from "../../helpers/generalTypes";
+import { Size } from "../general/useWindowSize";
 
 interface Props {
     coverUrl: string;
@@ -26,9 +26,10 @@ interface Props {
     showProp: boolean;
     setShowProp: React.Dispatch<React.SetStateAction<boolean>>;
     setProgress: React.Dispatch<React.SetStateAction<number>>;
+    size: Size;
 }
 
-export default function (props: Props) {
+export default function LibraryBookModal(props: Props) {
     const book = props.bookInfo;
     const setProgress = props.setProgress;
     const jwtToken = localStorage.getItem("jwt-token");
@@ -41,14 +42,14 @@ export default function (props: Props) {
         initialValues: { select: props.bookCategory },
         onSubmit: async (values, { setSubmitting }) => {
             setSubmitting(false);
-            const req_body = [props.bookInfo];
+            const reqBody = [props.bookInfo];
             const config = {
                 url: `https://biblioterra.herokuapp.com/v1/library/add/${values.select}`,
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${jwtToken}`,
                 },
-                data: req_body,
+                data: reqBody,
             };
             try {
                 setProgress(50);
@@ -100,7 +101,9 @@ export default function (props: Props) {
             className="text-dark"
             tabIndex="-1"
         >
-            <MDBModalDialog size="lg">
+            <MDBModalDialog
+                size={props.size.width! < 600 ? "fullscreen-sm-down" : "lg"}
+            >
                 <MDBModalContent className="bg text-light">
                     <MDBModalHeader>
                         <MDBModalTitle className="d-flex flex-wrap">

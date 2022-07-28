@@ -1,9 +1,10 @@
-import Navbar from "../general/Navbar";
+import Navbar from "../general/Navbar/Navbar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode, { JwtPayload } from "jwt-decode";
-import { MDBProgress, MDBProgressBar, MDBSpinner } from "mdb-react-ui-kit";
+import { MDBProgress, MDBProgressBar } from "mdb-react-ui-kit";
+import BlankLoadingSpinner from "../general/BlankLoadingSpinner";
 
 export default function LibraryParent() {
     const [userInfo, setUserInfo] = useState<any>(undefined);
@@ -81,7 +82,7 @@ export default function LibraryParent() {
                 <div className="">
                     <MDBProgress height={progress === 0 ? "0" : "2"}>
                         <MDBProgressBar
-                            style={{ zIndex: "10" }}
+                            style={{ zIndex: "10000" }}
                             width={progress}
                             valuemin={0}
                             valuemax={100}
@@ -104,14 +105,7 @@ export default function LibraryParent() {
                                 }}
                             />
                         ) : (
-                            <div className="d-flex justify-content-center mt-5">
-                                <MDBSpinner
-                                    style={{
-                                        width: "4rem",
-                                        height: "4rem",
-                                    }}
-                                ></MDBSpinner>
-                            </div>
+                            <BlankLoadingSpinner />
                         )}
                     </div>
                 </div>

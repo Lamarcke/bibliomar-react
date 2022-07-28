@@ -8,10 +8,10 @@ import ResultScreen from "./results/ResultScreen";
 import LoadingScreen from "./loading/LoadingScreen";
 import axios, { AxiosResponse } from "axios";
 import Recommendations from "./recommendations/Recommendations";
-import Navbar from "../general/Navbar";
-import { Book } from "../../helpers/types";
+import Navbar from "../general/Navbar/Navbar";
+import { Book } from "../../helpers/generalTypes";
 
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+export const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**
  * It takes a FormData object, and returns a string that can be used to make a request to the API
@@ -217,7 +217,7 @@ function Search() {
             // Means categoryContext === "any", so we are doing a dual request.
             let request1 = await getSearchResults(formData, "fiction");
             // Waits 4 seconds so libgen doesn't get mad at us.
-            await sleep(4000);
+            await sleep(3000);
             let request2 = await getSearchResults(formData, "sci-tech");
             if (Number.isInteger(request1) && Number.isInteger(request2)) {
                 errorHandler(request2);
